@@ -87,6 +87,8 @@ h1 { margin: 0; font-size: clamp(30px, 8vw, 40px); font-weight: 700; letter-spac
   transform: rotateX(var(--rx)) rotateY(var(--ry));
   transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .4s;
   box-shadow: 0 18px 40px -20px rgba(var(--mts), .55);
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
 }
 .job::before {
   content: ""; position: absolute; inset: 0; pointer-events: none;
@@ -142,6 +144,9 @@ footer {
   .links a:hover { border-color: rgba(var(--accent), .6); transform: translateY(-2px); }
   .links a:hover .ico.sm { color: var(--fg); }
 }
+.job.active { transition-duration: .15s, .4s; box-shadow: 0 28px 54px -20px rgba(var(--mts), .75); }
+.job.active::after { opacity: 1; }
+.job.active .job-logo { transform: rotate(-4deg) scale(1.06); }
 
 /* Появление блоков по очереди */
 .rise { opacity: 0; transform: translateY(14px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: var(--delay, .1s); }
@@ -249,18 +254,36 @@ const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 (() => {
   const el = document.getElementById("job");
-  if (reduce || !matchMedia("(hover: hover)").matches) return;
-  el.addEventListener("pointermove", e => {
+  if (reduce) return;
+  let timer;
+  const tilt = e => {
     const r = el.getBoundingClientRect();
-    const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    const x = Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1), y = Math.min(Math.max((e.clientY - r.top) / r.height, 0), 1);
     el.style.setProperty("--rx", ((0.5 - y) * 8).toFixed(2) + "deg");
     el.style.setProperty("--ry", ((x - 0.5) * 10).toFixed(2) + "deg");
     el.style.setProperty("--mx", (x * 100).toFixed(1) + "%");
     el.style.setProperty("--my", (y * 100).toFixed(1) + "%");
-  });
-  el.addEventListener("pointerleave", () => {
+  };
+  const reset = () => {
+    el.classList.remove("active");
     el.style.setProperty("--rx", "0deg");
     el.style.setProperty("--ry", "0deg");
+  };
+  el.addEventListener("pointermove", e => {
+    if (e.pointerType === "mouse" || el.classList.contains("active")) tilt(e);
+  });
+  el.addEventListener("pointerdown", e => {
+    if (e.pointerType === "mouse") return;
+    clearTimeout(timer);
+    el.classList.add("active");
+    tilt(e);
+  });
+  el.addEventListener("pointerup", e => {
+    if (e.pointerType !== "mouse") timer = setTimeout(reset, 250);
+  });
+  el.addEventListener("pointercancel", reset);
+  el.addEventListener("pointerleave", e => {
+    if (e.pointerType === "mouse") reset();
   });
 })();
 
