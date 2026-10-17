@@ -1,0 +1,350 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Munir Bairamgulov</title>
+<meta name="description" content="Munir Bairamgulov — Go developer at MTS, Cashback team. Email, Telegram, GitHub.">
+<link rel="canonical" href="https://msunyc.dev/">
+<meta name="theme-color" content="#fbfbfb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121212" media="(prefers-color-scheme: dark)">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://msunyc.dev/">
+<meta property="og:title" content="Munir Bairamgulov">
+<meta property="og:description" content="Go developer at MTS, Cashback team.">
+<meta property="og:image" content="https://msunyc.dev/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Munir Bairamgulov — Go developer at MTS">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preload" href="fonts/onest-latin.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face {
+  font-family: "Onest";
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url(fonts/onest-latin.woff2) format("woff2");
+}
+@font-face {
+  font-family: "JetBrains Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(fonts/jetbrains-mono-latin-400.woff2) format("woff2");
+}
+:root {
+  --bg: #fbfbfb;
+  --surface: rgba(251, 251, 251, 0.82);
+  --fg: #141414;
+  --muted: #6b6b6b;
+  --line: #e4e4e4;
+  --dot: 20, 20, 20;
+  --mts: 230, 0, 45;
+  --accent: var(--mts);
+  --sans: "Onest", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, monospace;
+  --t-job: .3s;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #121212; --surface: rgba(18, 18, 18, 0.82); --fg: #ececec; --muted: #9a9a9a; --line: #2a2a2a; --dot: 236, 236, 236; color-scheme: dark; }
+}
+
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; background: var(--bg); color: var(--fg); font: 400 17px/1.55 var(--sans); overflow-x: hidden; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid rgb(var(--accent)); outline-offset: 3px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+
+#bg { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+
+main {
+  position: relative; z-index: 1;
+  flex: 1;
+  display: flex; align-items: center; justify-content: center;
+  padding-block: max(48px, env(safe-area-inset-top, 0px)) 32px;
+  padding-inline: max(16px, env(safe-area-inset-left, 0px)) max(16px, env(safe-area-inset-right, 0px));
+}
+.card { width: 100%; max-width: 540px; display: flex; flex-direction: column; align-items: center; gap: 40px; text-align: center; }
+
+h1 { margin: 0; font-size: clamp(30px, 8vw, 40px); font-weight: 700; letter-spacing: -0.025em; line-height: 1.1; }
+.meta { margin-top: 14px; display: flex; justify-content: center; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--muted); }
+.meta > span { display: inline-flex; align-items: center; gap: 7px; }
+.meta svg { width: 14px; height: 14px; fill: currentColor; flex: none; }
+.meta b { font-weight: inherit; color: var(--fg); }
+#clock { font-family: var(--mono); color: var(--fg); }
+
+.job-wrap { width: 100%; perspective: 900px; }
+.job {
+  --rx: 0deg; --ry: 0deg; --mx: 50%; --my: 0%;
+  position: relative; overflow: hidden; text-align: left;
+  color: #fff; background: rgb(var(--mts));
+  padding: 20px 22px;
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transition: transform .5s cubic-bezier(.2,.7,.2,1), box-shadow .4s;
+  box-shadow: 0 18px 40px -20px rgba(var(--mts), .55);
+}
+.job::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, .22) 1px, transparent 1.3px);
+  background-size: 14px 14px;
+  -webkit-mask-image: linear-gradient(115deg, transparent 30%, #000 100%);
+  mask-image: linear-gradient(115deg, transparent 30%, #000 100%);
+}
+.job::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(340px circle at var(--mx) var(--my), rgba(255, 255, 255, .24), transparent 60%);
+  opacity: 0; transition: opacity .3s;
+}
+.job > * { position: relative; z-index: 1; }
+.job-top { display: flex; justify-content: space-between; align-items: center; gap: 12px; font: 400 12px var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.live { display: inline-flex; align-items: center; gap: 9px; }
+.live i { width: 8px; height: 8px; border-radius: 50%; background: #fff; animation: pulse 1.8s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, .7); } 70%, 100% { box-shadow: 0 0 0 9px rgba(255, 255, 255, 0); } }
+.job-main { display: flex; align-items: center; gap: 18px; margin-top: 18px; }
+.job-logo { width: 68px; height: 68px; flex: none; display: block; box-shadow: 0 0 0 1px rgba(255, 255, 255, .4); transition: transform .4s cubic-bezier(.2,.7,.2,1); }
+.job-title { font-size: clamp(22px, 6vw, 28px); font-weight: 700; letter-spacing: -.02em; line-height: 1.15; }
+.job-team { font-size: 15px; margin-top: 4px; }
+
+.contacts { display: flex; flex-direction: column; align-items: center; gap: 16px; }
+.contacts, footer { --delay: calc(var(--t-job) + .65s); }
+.mail { display: flex; align-items: center; justify-content: center; gap: 12px; flex-wrap: wrap; font-weight: 500; }
+.mail a { text-decoration: none; background: linear-gradient(rgb(var(--accent)), rgb(var(--accent))) 0 100% / 0 1px no-repeat; transition: background-size .3s; }
+.mail button { display: inline-flex; align-items: center; justify-content: center; width: 40px; height: 40px; padding: 0; color: var(--muted); background: var(--surface); border: 1px solid var(--line); cursor: pointer; transition: color .2s, border-color .2s; }
+.mail button svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.mail button .i-ok, .mail button.done .i-copy { display: none; }
+.mail button.done .i-ok { display: block; }
+.mail button.done { color: rgb(var(--accent)); border-color: rgba(var(--accent), .6); }
+.links { display: flex; justify-content: center; gap: 12px; flex-wrap: wrap; }
+.links a { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; border: 1px solid var(--line); background: var(--surface); padding: 8px 14px 8px 10px; font-size: 15px; transition: border-color .25s, transform .25s; }
+
+.ico { display: flex; align-items: center; justify-content: center; flex: none; }
+.ico.sm { width: 20px; height: 20px; color: var(--muted); transition: color .25s; }
+.ico.sm svg { width: 100%; height: 100%; fill: currentColor; }
+
+footer {
+  position: relative; z-index: 1;
+  padding: 0 16px max(20px, env(safe-area-inset-bottom, 0px));
+  text-align: center; font: 400 12px var(--mono); letter-spacing: .04em; color: var(--muted);
+}
+.heart { width: 12px; height: 12px; vertical-align: -1px; fill: rgb(var(--mts)); }
+
+@media (hover: hover) {
+  .job:hover { transition-duration: .15s, .4s; box-shadow: 0 28px 54px -20px rgba(var(--mts), .75); }
+  .job:hover::after { opacity: 1; }
+  .job:hover .job-logo { transform: rotate(-4deg) scale(1.06); }
+  .mail a:hover { background-size: 100% 1px; }
+  .mail button:hover { color: var(--fg); border-color: var(--fg); }
+  .links a:hover { border-color: rgba(var(--accent), .6); transform: translateY(-2px); }
+  .links a:hover .ico.sm { color: var(--fg); }
+}
+
+/* Появление блоков по очереди */
+.rise { opacity: 0; transform: translateY(14px); animation: rise .7s cubic-bezier(.2,.7,.2,1) forwards; animation-delay: var(--delay, .1s); }
+@keyframes rise { to { opacity: 1; transform: none; } }
+
+.job { animation: deal 1s cubic-bezier(.2,.85,.25,1) var(--t-job) backwards; }
+@keyframes deal {
+  0% { opacity: 0; transform: translateY(48px) rotateX(-60deg) scale(.9); clip-path: inset(49% 0 49% 0); }
+  25% { opacity: 1; }
+  65% { clip-path: inset(0 0 0 0); }
+  100% { transform: rotateX(var(--rx)) rotateY(var(--ry)); clip-path: inset(0 0 0 0); }
+}
+.job > .job-shine {
+  position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, .45) 50%, transparent 65%);
+  transform: translateX(-110%);
+  animation: shine .9s cubic-bezier(.4,0,.2,1) calc(var(--t-job) + .85s) forwards;
+}
+@keyframes shine { to { transform: translateX(110%); } }
+.job-top, .job-title, .job-team { animation: pop-in .55s cubic-bezier(.2,.8,.2,1) backwards; }
+.job-top { animation-delay: calc(var(--t-job) + .45s); }
+.job-title { animation-delay: calc(var(--t-job) + .6s); }
+.job-team { animation-delay: calc(var(--t-job) + .7s); }
+@keyframes pop-in { from { opacity: 0; transform: translateY(10px); } }
+.job-logo { animation: logo-in .7s cubic-bezier(.3,1.6,.5,1) calc(var(--t-job) + .5s) backwards; }
+@keyframes logo-in { from { opacity: 0; transform: scale(.3) rotate(-120deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .rise { animation: none; opacity: 1; transform: none; }
+  .job, .job-top, .job-title, .job-team, .job-logo { animation: none; }
+  .job > .job-shine { display: none; }
+  .live i { animation: none; }
+  .job, .job-logo, .links a { transition: none; }
+  .job:hover .job-logo, .links a:hover { transform: none; }
+}
+</style>
+</head>
+<body>
+<canvas id="bg" aria-hidden="true"></canvas>
+
+<main>
+  <div class="card">
+    <div class="rise">
+      <h1>Munir Bairamgulov</h1>
+      <div class="meta">
+        <span>Studying at <b>ITMO University</b></span>
+        <span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>Saint Petersburg · GMT+3 · <time id="clock"></time></span>
+      </div>
+    </div>
+
+    <div class="job-wrap">
+      <div class="job" id="job">
+        <span class="job-shine" aria-hidden="true"></span>
+        <div class="job-top"><span class="live"><i></i>Currently at</span><span class="since">Since June 2025</span></div>
+        <div class="job-main">
+          <img class="job-logo" src="logos/mts.svg" alt="" width="68" height="68">
+          <div><div class="job-title">Go Developer at MTS</div><div class="job-team">Cashback team</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="contacts rise">
+      <div class="mail"><a id="email" href="mailto:hi@msunyc.dev">hi@msunyc.dev</a><button type="button" id="copy" aria-label="Copy email" title="Copy email"><svg class="i-copy" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><svg class="i-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></button><span id="copy-status" class="sr-only" aria-live="polite"></span></div>
+      <div class="links">
+        <a href="https://t.me/mbrmglv" target="_blank" rel="noopener"><span class="ico sm" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg></span>Telegram</a>
+        <a href="https://github.com/msuny-c" target="_blank" rel="noopener"><span class="ico sm" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></span>GitHub</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer class="rise">© <span id="year">2026</span> · built with love <svg class="heart" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 21s-7.5-4.6-9.6-9.2C.9 8.5 2.9 4.5 6.6 4.5c2.2 0 3.6 1.2 5.4 3.2 1.8-2 3.2-3.2 5.4-3.2 3.7 0 5.7 4 4.2 7.3C19.5 16.4 12 21 12 21z"/></svg></footer>
+
+<script>
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+// Копирование почты
+(() => {
+  const btn = document.getElementById("copy"), em = document.getElementById("email"), status = document.getElementById("copy-status");
+  let timer;
+  btn.addEventListener("click", async () => {
+    clearTimeout(timer);
+    try {
+      await navigator.clipboard.writeText(em.textContent.trim());
+      btn.classList.add("done");
+      status.textContent = "Email copied";
+      timer = setTimeout(() => { btn.classList.remove("done"); status.textContent = ""; }, 1800);
+    } catch (_) {
+      const r = document.createRange(); r.selectNodeContents(em);
+      getSelection().removeAllRanges(); getSelection().addRange(r);
+      status.textContent = "Email selected, press Ctrl+C or Cmd+C to copy";
+    }
+  });
+})();
+
+(() => {
+  const el = document.getElementById("clock");
+  const fmt = new Intl.DateTimeFormat("en-GB", { timeZone: "Europe/Moscow", hour: "2-digit", minute: "2-digit", hourCycle: "h23" });
+  const tick = () => {
+    el.textContent = el.dateTime = fmt.format(new Date());
+    setTimeout(tick, 60000 - Date.now() % 60000);
+  };
+  tick();
+})();
+
+(() => {
+  const el = document.getElementById("job");
+  if (reduce || !matchMedia("(hover: hover)").matches) return;
+  el.addEventListener("pointermove", e => {
+    const r = el.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    el.style.setProperty("--rx", ((0.5 - y) * 8).toFixed(2) + "deg");
+    el.style.setProperty("--ry", ((x - 0.5) * 10).toFixed(2) + "deg");
+    el.style.setProperty("--mx", (x * 100).toFixed(1) + "%");
+    el.style.setProperty("--my", (y * 100).toFixed(1) + "%");
+  });
+  el.addEventListener("pointerleave", () => {
+    el.style.setProperty("--rx", "0deg");
+    el.style.setProperty("--ry", "0deg");
+  });
+})();
+
+document.getElementById("year").textContent = new Date().getFullYear();
+
+// Фон: точечная сетка, которая расступается вокруг курсора и подсвечивается
+(() => {
+  const cv = document.getElementById("bg"), ctx = cv.getContext("2d");
+  const GAP = 26, R = 140, PUSH = 12;
+  let W = 0, H = 0, dots = [], dotRGB = "20,20,20", accRGB = "230,0,45";
+  const m = { x: -1e4, y: -1e4, tx: -1e4, ty: -1e4, s: 0, ts: 0 };
+  let running = false;
+
+  function readColors() {
+    const cs = getComputedStyle(document.documentElement);
+    dotRGB = cs.getPropertyValue("--dot").trim() || dotRGB;
+    accRGB = cs.getPropertyValue("--accent").trim() || accRGB;
+  }
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    W = innerWidth; H = innerHeight;
+    cv.width = W * dpr; cv.height = H * dpr;
+    cv.style.width = W + "px"; cv.style.height = H + "px";
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    dots = [];
+    const ox = (W % GAP) / 2, oy = (H % GAP) / 2;
+    for (let x = ox; x <= W; x += GAP) for (let y = oy; y <= H; y += GAP) dots.push(x, y);
+    readColors();
+    draw();
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    // спокойные точки — одним проходом
+    ctx.fillStyle = `rgba(${dotRGB},0.09)`;
+    ctx.beginPath();
+    const active = [];
+    for (let i = 0; i < dots.length; i += 2) {
+      const x = dots[i], y = dots[i + 1];
+      const dx = x - m.x, dy = y - m.y, d = Math.hypot(dx, dy);
+      if (m.s > 0.01 && d < R) { active.push(x, y, dx, dy, d); continue; }
+      ctx.moveTo(x + 1, y); ctx.arc(x, y, 1, 0, Math.PI * 2);
+    }
+    ctx.fill();
+    // точки возле курсора
+    for (let i = 0; i < active.length; i += 5) {
+      const x = active[i], y = active[i + 1], dx = active[i + 2], dy = active[i + 3], d = active[i + 4];
+      let k = 1 - d / R; k = k * k * m.s;
+      const off = d ? (k * PUSH) / d : 0;
+      const px = x + dx * off, py = y + dy * off;
+      ctx.fillStyle = `rgba(${accRGB},${0.09 + k * 0.6})`;
+      ctx.beginPath(); ctx.arc(px, py, 1 + k * 1.8, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+
+  function tick() {
+    m.x += (m.tx - m.x) * 0.18;
+    m.y += (m.ty - m.y) * 0.18;
+    m.s += (m.ts - m.s) * 0.08;
+    draw();
+    const moving = Math.abs(m.tx - m.x) > 0.3 || Math.abs(m.ty - m.y) > 0.3 || Math.abs(m.ts - m.s) > 0.004;
+    if (moving) requestAnimationFrame(tick); else running = false;
+  }
+  const kick = () => { if (!running) { running = true; requestAnimationFrame(tick); } };
+
+  addEventListener("resize", resize);
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => { readColors(); draw(); });
+  resize();
+
+  if (reduce) return;
+  addEventListener("pointermove", e => {
+    if (m.s < 0.02) { m.x = e.clientX; m.y = e.clientY; }
+    m.tx = e.clientX; m.ty = e.clientY; m.ts = 1; kick();
+  }, { passive: true });
+  addEventListener("pointerdown", e => {
+    m.x = m.tx = e.clientX; m.y = m.ty = e.clientY; m.ts = 1; kick();
+  }, { passive: true });
+  const release = e => { if (!e || e.pointerType !== "mouse") { m.ts = 0; kick(); } };
+  addEventListener("pointerup", release);
+  addEventListener("pointercancel", release);
+  document.documentElement.addEventListener("mouseleave", () => { m.ts = 0; kick(); });
+  addEventListener("blur", () => { m.ts = 0; kick(); });
+})();
+</script>
+</body>
+</html>
